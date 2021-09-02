@@ -1,0 +1,24 @@
+{
+    "name": "digistorm/omnipay-rdp",
+    "type": "library",
+    "description": "Red Dot Payment driver for the Omnipay payment processing library",
+    "keywords": [
+        "gateway",
+        "red dot payment",
+        "merchant",
+        "omnipay",
+        "pay",
+        "payment"
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": { "Omnipay\\RDP\\" : "src/" }
+    },
+    "require": {
+        "omnipay/common": "^3"
+    },
+    "require-dev": {
+        "omnipay/tests": "^3"
+    },
+    "prefer-stable": true
+}
