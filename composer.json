@@ -12,7 +12,7 @@
     ],
     "license": "MIT",
     "autoload": {
-        "psr-4": { "Omnipay\\RDP\\" : "src/" }
+        "psr-4": { "Omnipay\\Rdp\\" : "src/" }
     },
     "require": {
         "omnipay/common": "^3"

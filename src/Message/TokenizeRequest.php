@@ -16,9 +16,9 @@ class TokenizeRequest extends AbstractRequest
         /* @var $card \OmniPay\Common\CreditCard */
         $card = $this->getParameter('card');
         $card->validate();
-        $charge = $this->getParameter('amount');
-        $customer = $this->getCustomer();
-        $metadata = $this->getMetadata();
+        // $charge = $this->getParameter('amount');
+        // $customer = $this->getCustomer();
+        // $metadata = $this->getMetadata();
 
         $data = [
 
@@ -28,18 +28,18 @@ class TokenizeRequest extends AbstractRequest
             'transaction_type' => 'C',
 
             // Transaction Details
-            'order_id' => $this->getTransactionId(),
-            'PaymentDesc' => 'Payment for entry ' . $metadata['entry_uuid'],
-            'OrderNumber' => $this->getOrderId(),
-            'Amount' => number_format($charge->getAmount() / 100, 2),
-            'ccy' => $charge->getCurrency()->getCode(),
+            'order_id' => 'ds-placeholder', // $this->getTransactionId(),
+            // 'PaymentDesc' => 'Payment for entry ' . $metadata['entry_uuid'],
+            // 'OrderNumber' => $this->getOrderId(),
+            // 'Amount' => number_format($charge->getAmount() / 100, 2),
+            'ccy' => 'MYR', // $charge->getCurrency()->getCode(),
 
             // Card Details
             'card_no' => $card->getNumber(),
             'payer_name' => $card->getName(),
             'exp_date' => $card->getExpiryDate('mY'),
             'cvv2' => $card->getCvv(),
-            'payer_email' => $customer['email'],
+            'payer_email' => 'placeholder@email.com', // $customer['email'],
         ];
 
         // Generate Signature

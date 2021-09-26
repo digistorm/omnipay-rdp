@@ -77,6 +77,12 @@ class Gateway extends AbstractGateway
         return $this->setParameter('secretKey', $value);
     }
 
+    public function createToken(array $parameters = array())
+    {
+        // TODO change this to 'Rdp'
+        return $this->createRequest('\Omnipay\RDP\Message\TokenizeRequest', $parameters);
+    }
+
     /**
      * @param array $parameters
      *
