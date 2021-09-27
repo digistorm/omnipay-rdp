@@ -20,7 +20,7 @@ class AbstractResponse extends OmnipayResponse
 
     public function isSuccessful()
     {
-        if (!isset($this->data['response_code']) !== AbstractResponse::PAYMENT_STATUS_SUCCESS) {
+        if (!isset($this->data['response_code']) || $this->data['response_code'] !== AbstractResponse::PAYMENT_STATUS_SUCCESS) {
             return false;
         }
         return true;
@@ -37,6 +37,9 @@ class AbstractResponse extends OmnipayResponse
     {
         if ($this->isSuccessful()) {
             return null;
+        }
+        if (isset($this->data['acquirer_response_msg'])) {
+            return $this->data['acquirer_response_msg'];
         }
         if (isset($this->data['response_msg'])) {
             return $this->data['response_msg'];

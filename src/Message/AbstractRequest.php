@@ -50,9 +50,9 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     /**
      * @return string
      */
-    public function getPassword()
+    public function getSecretKey()
     {
-        return $this->getParameter('password');
+        return $this->getParameter('secretKey');
     }
 
     /**
@@ -60,9 +60,26 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      *
      * @return AbstractRequest provides a fluent interface.
      */
-    public function setPassword($value)
+    public function setSecretKey($value)
     {
-        return $this->setParameter('password', $value);
+        return $this->setParameter('secretKey', $value);
+    }
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->getParameter('token');
+    }
+
+    /**
+     * @param $value
+     *
+     * @return AbstractRequest provides a fluent interface.
+     */
+    public function setToken($value)
+    {
+        return $this->setParameter('token', $value);
     }
 
     public function setCustomer($value)
@@ -111,11 +128,15 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     {
         $response = $this->httpClient->request(
             $this->getHttpMethod(),
-            $this->getEndpointBase(),
+            $this->getEndpoint(),
             $this->getHeaders(),
             json_encode($data)
         );
-        return $this->createResponse($response);
+        return $this->createResponse($response->getBody()->getContents());
+    }
+
+    public function getEndpoint() {
+        return $this->getEndpointBase();
     }
     
     /**

@@ -13,6 +13,7 @@ class PurchaseRequest extends AbstractRequest
 
     public function getData()
     {
+        // TODO this is not required if using token mode
         if (!$this->getParameter('card')) {
             throw new InvalidRequestException('You must pass a "card" parameter.');
         }
@@ -21,29 +22,24 @@ class PurchaseRequest extends AbstractRequest
         $card = $this->getParameter('card');
         $card->validate();
         $charge = $this->getParameter('amount');
-        $customer = $this->getCustomer();
+        // $customer = $this->getCustomer();
 
         $data = [
-
             // Generic Details
             'mid' => $this->getMerchantId(),
-            'payment_type' => 'S',
-            'api_mode' => 'direct_n3d',
-            
-            // Token Details
-            // TODO alternatively support without tokenization
-            'payer_id' => '',
-            
-            // Transaction Details
             'order_id' => $this->getTransactionId(),
+            'payment_type' => 'S',
             'amount' => number_format($charge->getAmount() / 100, 2),
             'ccy' => $charge->getCurrency()->getCode(),
-            'payer_email' => $customer['email'],
+            'payer_email' => $this->getToken()['payer_email'],
+            'api_mode' => 'direct_n3d',
+            'payer_name' => $this->getToken()['payer_name'],
+            'payer_id' => $this->getToken()['payer_id'],
             'cvv2' => $card->getCvv(),
         ];
 
         // Generate Signature
-        $data['signature'] = $this->generateSignature($data);
+        $data['signature'] = $this->generateSignature(static::MODE_TOKEN, $data);
 
         return $data;
     }
@@ -54,7 +50,7 @@ class PurchaseRequest extends AbstractRequest
     public function getEndpoint()
     {
         // https://secure-dev.reddotpayment.com/service/payment-api
-        return parent::getEndpointBase() . 'service/payment-api';
+        return trim(parent::getEndpointBase(), '/') . '/service/payment-api';
     }
 
         /**
@@ -81,11 +77,12 @@ class PurchaseRequest extends AbstractRequest
                 } else {
                     $dataToSign .= substr($params['token_id'], 0, 6) . substr($params['token_id'], -4);
                 }
+                $dataToSign .= substr($params['cvv2'], -1);
                 break;
             default:
                 throw new \Exception('Unsupported mode');
         }
-        $dataToSign .= $this->getParameter('secret_key');
+        $dataToSign .= $this->getSecretKey();
         return hash('sha512', $dataToSign);
     }
 

@@ -24,22 +24,22 @@ class TokenizeRequest extends AbstractRequest
 
             // Generic Details
             'mid' => $this->getMerchantId(),
+            'order_id' => 'ds-placeholder', // $this->getTransactionId(),
             'api_mode' => 'direct_token_api',
             'transaction_type' => 'C',
+            'payer_name' => $card->getName(),
+            'payer_email' => 'placeholder@email.com', // $customer['email'],
+            'ccy' => 'SGD', // TODO where does this come from? $charge->getCurrency()->getCode(),
+            'card_no' => $card->getNumber(),
+            'exp_date' => $card->getExpiryDate('mY'),
+            'cvv2' => $card->getCvv(),
 
             // Transaction Details
-            'order_id' => 'ds-placeholder', // $this->getTransactionId(),
             // 'PaymentDesc' => 'Payment for entry ' . $metadata['entry_uuid'],
             // 'OrderNumber' => $this->getOrderId(),
             // 'Amount' => number_format($charge->getAmount() / 100, 2),
-            'ccy' => 'MYR', // $charge->getCurrency()->getCode(),
 
             // Card Details
-            'card_no' => $card->getNumber(),
-            'payer_name' => $card->getName(),
-            'exp_date' => $card->getExpiryDate('mY'),
-            'cvv2' => $card->getCvv(),
-            'payer_email' => 'placeholder@email.com', // $customer['email'],
         ];
 
         // Generate Signature
@@ -55,7 +55,7 @@ class TokenizeRequest extends AbstractRequest
         foreach ($params as $v) {
            $dataToSign .= $v;
         } 
-        $dataToSign .= $this->getParameter('secret_key');
+        $dataToSign .= $this->getSecretKey();
         return hash('sha512', $dataToSign);
     }
 
@@ -65,7 +65,7 @@ class TokenizeRequest extends AbstractRequest
     public function getEndpoint()
     {
         // https://secure-dev.reddotpayment.com/service/token-api
-        return parent::getEndpointBase() . 'service/token-api';
+        return trim(parent::getEndpointBase(), '/') . '/service/token-api';
     }
     /**
      * @param $data
