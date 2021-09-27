@@ -12,19 +12,15 @@ class TokenizeRequest extends AbstractRequest
         if (!$this->getParameter('card')) {
             throw new InvalidRequestException('You must pass a "card" parameter.');
         }
-
-        /* @var $card \OmniPay\Common\CreditCard */
         $card = $this->getParameter('card');
         $card->validate();
-        // $charge = $this->getParameter('amount');
         // $customer = $this->getCustomer();
-        // $metadata = $this->getMetadata();
 
         $data = [
 
             // Generic Details
             'mid' => $this->getMerchantId(),
-            'order_id' => 'ds-placeholder', // $this->getTransactionId(),
+            'order_id' => 'ds-placeholder',
             'api_mode' => 'direct_token_api',
             'transaction_type' => 'C',
             'payer_name' => $card->getName(),
@@ -33,13 +29,6 @@ class TokenizeRequest extends AbstractRequest
             'card_no' => $card->getNumber(),
             'exp_date' => $card->getExpiryDate('mY'),
             'cvv2' => $card->getCvv(),
-
-            // Transaction Details
-            // 'PaymentDesc' => 'Payment for entry ' . $metadata['entry_uuid'],
-            // 'OrderNumber' => $this->getOrderId(),
-            // 'Amount' => number_format($charge->getAmount() / 100, 2),
-
-            // Card Details
         ];
 
         // Generate Signature
