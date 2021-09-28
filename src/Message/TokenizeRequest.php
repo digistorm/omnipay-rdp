@@ -14,18 +14,15 @@ class TokenizeRequest extends AbstractRequest
         }
         $card = $this->getParameter('card');
         $card->validate();
-        // $customer = $this->getCustomer();
 
         $data = [
-
             // Generic Details
             'mid' => $this->getMerchantId(),
-            'order_id' => 'ds-placeholder',
+            'order_id' => $this->getTransactionUuid(),
             'api_mode' => 'direct_token_api',
             'transaction_type' => 'C',
             'payer_name' => $card->getName(),
-            'payer_email' => 'placeholder@email.com', // $customer['email'],
-            'ccy' => 'SGD', // TODO where does this come from? $charge->getCurrency()->getCode(),
+            'payer_email' => $this->getEmail(),
             'card_no' => $card->getNumber(),
             'exp_date' => $card->getExpiryDate('mY'),
             'cvv2' => $card->getCvv(),
