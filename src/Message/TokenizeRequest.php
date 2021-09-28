@@ -18,7 +18,7 @@ class TokenizeRequest extends AbstractRequest
         $data = [
             // Generic Details
             'mid' => $this->getMerchantId(),
-            'order_id' => $this->getTransactionUuid(),
+            'order_id' => $this->getOrderId(),
             'api_mode' => 'direct_token_api',
             'transaction_type' => 'C',
             'payer_name' => $card->getName(),

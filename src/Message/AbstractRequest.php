@@ -102,14 +102,14 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getParameter('email');
     }
     
-    public function setTransactionUuid($value)
+    public function setOrderId($value)
     {
-        return $this->setParameter('transactionUuid', $value);
+        return $this->setParameter('orderId', $value);
     }
 
-    public function getTransactionUuid()
+    public function getOrderId()
     {
-        return $this->getParameter('transactionUuid');
+        return $this->getParameter('orderId');
     }
 
     abstract protected function createResponse($data);
