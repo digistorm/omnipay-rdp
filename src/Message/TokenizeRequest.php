@@ -16,11 +16,10 @@ class TokenizeRequest extends AbstractRequest
         $card->validate();
 
         $data = [
-            // Generic Details
-            'mid' => $this->getMerchantId(),
-            'order_id' => $this->getOrderId(),
             'api_mode' => 'direct_token_api',
             'transaction_type' => 'C',
+            'mid' => $this->getMerchantId(),
+            'order_id' => $this->getOrderId(),
             'payer_name' => $card->getName(),
             'payer_email' => $this->getEmail(),
             'card_no' => $card->getNumber(),
