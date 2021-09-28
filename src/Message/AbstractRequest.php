@@ -29,57 +29,54 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('endpointBase', $value);
     }
 
-    /**
-     * @return string
-     */
     public function getMerchantId()
     {
         return $this->getParameter('merchantId');
     }
 
-    /**
-     * @param $value
-     *
-     * @return AbstractRequest provides a fluent interface.
-     */
     public function setMerchantId($value)
     {
         return $this->setParameter('merchantId', $value);
     }
 
-    /**
-     * @return string
-     */
     public function getSecretKey()
     {
         return $this->getParameter('secretKey');
     }
 
-    /**
-     * @param $value
-     *
-     * @return AbstractRequest provides a fluent interface.
-     */
     public function setSecretKey($value)
     {
         return $this->setParameter('secretKey', $value);
     }
-    /**
-     * @return string
-     */
-    public function getToken()
+
+    public function getPayerId()
     {
-        return $this->getParameter('token');
+        return $this->getParameter('payerId');
     }
 
-    /**
-     * @param $value
-     *
-     * @return AbstractRequest provides a fluent interface.
-     */
-    public function setToken($value)
+    public function setPayerId($value)
     {
-        return $this->setParameter('token', $value);
+        return $this->setParameter('payerId', $value);
+    }
+
+    public function getPayerName()
+    {
+        return $this->getParameter('payerName');
+    }
+
+    public function setPayerName($value)
+    {
+        return $this->setParameter('payerName', $value);
+    }
+
+    public function getPayerEmail()
+    {
+        return $this->getParameter('payerEmail');
+    }
+
+    public function setPayerEmail($value)
+    {
+        return $this->setParameter('payerEmail', $value);
     }
 
     public function setCustomer($value)

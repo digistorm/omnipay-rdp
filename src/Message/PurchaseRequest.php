@@ -13,7 +13,7 @@ class PurchaseRequest extends AbstractRequest
 
     public function getData()
     {
-        // TODO this is not required if using token mode
+        // This is currently required to fetch the cvv2 value
         if (!$this->getParameter('card')) {
             throw new InvalidRequestException('You must pass a "card" parameter.');
         }
@@ -22,19 +22,17 @@ class PurchaseRequest extends AbstractRequest
         $card = $this->getParameter('card');
         $card->validate();
         $charge = $this->getParameter('amount');
-        // $customer = $this->getCustomer();
 
         $data = [
-            // Generic Details
-            'mid' => $this->getMerchantId(),
-            'order_id' => $this->getTransactionId(),
+            'api_mode' => 'direct_n3d',
             'payment_type' => 'S',
+            'mid' => $this->getMerchantId(),
+            'order_id' => $this->getOrderId(),
             'amount' => number_format($charge->getAmount() / 100, 2),
             'ccy' => $charge->getCurrency()->getCode(),
-            'payer_email' => $this->getToken()['payer_email'],
-            'api_mode' => 'direct_n3d',
-            'payer_name' => $this->getToken()['payer_name'],
-            'payer_id' => $this->getToken()['payer_id'],
+            'payer_id' => $this->getPayerId(),
+            'payer_name' => $this->getPayerName(),
+            'payer_email' => $this->getPayerEmail(),
             'cvv2' => $card->getCvv(),
         ];
 
@@ -69,7 +67,6 @@ class PurchaseRequest extends AbstractRequest
                 $cardNo = substr($params['card_no'], 0, 6) . substr($params['card_no'], -4);
                 $dataToSign .= $cardNo;
                 $dataToSign .= $params['exp_date'];
-                $dataToSign .= substr($params['cvv2'], -1);
                 break;
             case static::MODE_TOKEN:
                 if (isset($params['payer_id'])) {
@@ -77,10 +74,12 @@ class PurchaseRequest extends AbstractRequest
                 } else {
                     $dataToSign .= substr($params['token_id'], 0, 6) . substr($params['token_id'], -4);
                 }
-                $dataToSign .= substr($params['cvv2'], -1);
                 break;
             default:
                 throw new \Exception('Unsupported mode');
+        }
+        if (isset($params['cvv2'])) {
+            $dataToSign .= substr($params['cvv2'], -1);
         }
         $dataToSign .= $this->getSecretKey();
         return hash('sha512', $dataToSign);
