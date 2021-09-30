@@ -17,12 +17,8 @@ class PurchaseRequest extends AbstractRequest
         if (!$this->getParameter('card')) {
             throw new InvalidRequestException('You must pass a "card" parameter.');
         }
-
-        /* @var $card \OmniPay\Common\CreditCard */
         $card = $this->getParameter('card');
-        $card->validate();
         $charge = $this->getParameter('amount');
-
         $data = [
             'api_mode' => 'direct_n3d',
             'payment_type' => 'S',
