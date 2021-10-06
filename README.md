@@ -27,34 +27,23 @@ $gateway->setMerchantId('merchantIdValue');
 $gateway->setSecretKey('secretKeyValue');
 
 
+// Tokenize a card
+/* @var \Omnipay\Rdp\Message\TokenResponse $response */
+$response = $gateway->createToken([
+    'card' => new CreditCard([
+        'firstName' => 'John',
+        'lastName' => 'Doe',
+        'expiryMonth' => '09',
+        'expiryYear' => '2029',
+        'number' => '4444333322221111',
+        'cvv' => '123',
+    ]),
+    'email' => 'john.doe@example.com',
+    'order_id' => 'cba',
+])->send();
+
 // Charge using a card
-/* @var \Omnipay\Rdp\Message\TokeneResponse $response */
-$response = $gateway->createToken([
-    'card' => new CreditCard([
-        'firstName' => 'John',
-        'lastName' => 'Doe',
-        'expiryMonth' => '09',
-        'expiryYear' => '2029',
-        'number' => '4444333322221111',
-        'cvv' => '123',
-    ]),
-    'email' => 'john.doe@example.com',
-    'order_id' => 'cba',
-])->send();
-
-$response = $gateway->createToken([
-    'card' => new CreditCard([
-        'firstName' => 'John',
-        'lastName' => 'Doe',
-        'expiryMonth' => '09',
-        'expiryYear' => '2029',
-        'number' => '4444333322221111',
-        'cvv' => '123',
-    ]),
-    'email' => 'john.doe@example.com',
-    'order_id' => 'cba',
-])->send();
-
+/* @var \Omnipay\Rdp\Message\PurchaseResponse $response */
 $response = $gateway->purchase([
     'card' => new CreditCard([
         'firstName' => 'John',
