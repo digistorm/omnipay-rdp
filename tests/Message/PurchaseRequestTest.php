@@ -2,6 +2,8 @@
 
 namespace Omnipay\Rdp\Message;
 
+use Money\Currency;
+use Money\Money;
 use Omnipay\Tests\TestCase;
 
 class PurchaseRequestTest extends TestCase
@@ -11,12 +13,14 @@ class PurchaseRequestTest extends TestCase
         $this->request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
         $this->request->initialize(
             [
-                'endpointBase' => 'https://pay.e-ghl.com/ipgsg/payment.aspx',
-                'merchantId' => 'SIT',
-                'password' => 'sit12345',
-                'transactionId' => uniqid(),
-                'amount' => '10.00',
-                'currency' => 'MYR',
+                'endpointBase' => 'https://secure-dev.reddotpayment.com/',
+                'merchantId' => 'TEST123',
+                'secretKey' => 'pass654321',
+                'payer_id' => 'abc',
+                'payer_name' => 'John Doe',
+                'payer_email' => 'john.doe@example.com',
+                'orderId' => 'abc',
+                'money' => new Money(100, new Currency('SGD')),
                 'card' => $this->getValidCard(),
             ]
         );
@@ -39,6 +43,6 @@ class PurchaseRequestTest extends TestCase
 
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
-        $this->assertSame('[INVALID_REQUEST] Value \'ABCD1234\' is invalid. No valid Merchant Acquirer Relationship available', $response->getMessage());
+        $this->assertSame('Bank rejected transaction!', $response->getMessage());
     }
 }

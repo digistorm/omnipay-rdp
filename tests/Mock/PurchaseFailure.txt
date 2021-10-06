@@ -1,9 +1,7 @@
-HTTP/1.1 400 Bad Request
+HTTP/1.1 200 OK
 Cache-Control: private,no-store,no-cache,must-revalidate,proxy-revalidate
 Pragma: no-cache
-Content-Length: 884
 Content-Type: application/json; charset=utf-8
-Set-Cookie: ASP.NET_SessionId=wlliqq4uutv42xh0hfu134xy; path=/; secure; HttpOnly
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Headers: Content-Type
 Access-Control-Allow-Methods: GET, POST, OPTIONS
@@ -11,11 +9,28 @@ Access-Control-Max-Age: 1728000
 Date: Fri, 12 Dec 2014 01:15:15 GMT
 
 {
-    "error": {
-        "cause": "INVALID_REQUEST",
-        "explanation": "Value 'ABCD1234' is invalid. No valid Merchant Acquirer Relationship available",
-        "field": "merchantId",
-        "validationType": "INVALID"
-    },
-    "result": "ERROR"
+    "mid": "1007779912",
+    "transaction_id": "dstestpay001_1206184250213428293",
+    "order_id": "dstestpay001",
+    "acquirer_transaction_id": "2428738",
+    "request_amount": "123",
+    "request_ccy": "SGD",
+    "authorized_amount": "123",
+    "authorized_ccy": "SGD",
+    "response_code": "-1",
+    "response_msg": "failed",
+    "acquirer_response_code": "9967",
+    "acquirer_response_msg": "Bank rejected transaction!",
+    "acquirer_authorization_code": "",
+    "created_timestamp": "2021-09-22 11:56:37",
+    "acquirer_created_timestamp": "2021-09-22 11:56:32",
+    "first_6": "453208",
+    "last_4": "8195",
+    "payer_name": "John Doe",
+    "exp_date": "092029",
+    "request_timestamp": "2021-09-22 11:56:35",
+    "request_mid": "1007779912",
+    "transaction_type": "S",
+    "payment_mode": "1",
+    "signature": "33d28ce8fedaec33cdeb4ec801c65c804a6501913074642b759da8e8892f39ed18f657e0b7c7f5e8460d1bac2d729926321b326349afb44a42654b0943ca7848"
 }

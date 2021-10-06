@@ -2,6 +2,8 @@
 
 namespace Omnipay\Rdp;
 
+use Money\Currency;
+use Money\Money;
 use Omnipay\Common\CreditCard;
 use Omnipay\Tests\GatewayTestCase;
 
@@ -16,71 +18,84 @@ class GatewayTest extends GatewayTestCase
 
         $this->gateway = new Gateway($this->getHttpClient(), $this->getHttpRequest());
         $this->gateway->setTestMode(true);
-        $this->gateway->setEndpointBase('https://pay.e-ghl.com/ipgsg/payment.aspx');
+        $this->gateway->setEndpointBase('https://secure-dev.reddotpayment.com/');
         $this->gateway->setMerchantId('TEST123');
-        $this->gateway->setPassword('pass654321');
+        $this->gateway->setSecretKey('pass654321');
     }
 
-    /**
-     * @throws \Omnipay\Common\Exception\InvalidCreditCardException
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
-     */
     public function testPurchase()
     {
-        // TODO this should be fixed
         $request = $this->gateway->purchase([
-            'transactionId' => uniqid(),
-            'orderId' => uniqid(),
-            'amount' => '10.00',
-            'currency' => 'MYR',
-            'description' => 'Here is a description that is over 40 characters long. It will get truncated to 40 characters.',
             'card' => new CreditCard([
                 'firstName' => 'John',
                 'lastName' => 'Doe',
+                'expiryMonth' => '09',
+                'expiryYear' => '2029',
                 'number' => '4444333322221111',
-                'expiryMonth' => '03',
-                'expiryYear' => '2030',
                 'cvv' => '123',
             ]),
-            'customer' => [
-                'firstName' => 'John',
-                'lastName' => 'Doe',
-                'phone' => '012345678',
-                'address' => [
-                    'line_1' => 'Line 1',
-
-                ],
-                'email' => 'john.doe@example.com',
-            ],
+            'payer_id' => 'abc',
+            'payer_name' => 'John Doe',
+            'payer_email' => 'john.doe@example.com',
+            'orderId' => 'abc',
+            'money' => new Money(100, new Currency('SGD')),
         ]);
 
         $this->assertInstanceOf('Omnipay\Rdp\Message\PurchaseRequest', $request);
-        $this->assertSame('10.00', $request->getAmount());
 
         $data = $request->getData();
 
         $expectedData = [
-            'apiOperation' => 'PAY',
-            'order' => [
-                'amount' => '10.00',
-                'currency' => 'AUD',
-                'reference' => 'Here is a description that is over 40 ch',
-            ],
-            'sourceOfFunds' => [
-                'type' => 'CARD',
-                'provided' => [
-                    'card' => [
-                        'number' => '5999999789012346',
-                        'securityCode' => '123',
-                        'expiry' => [
-                            'month' => '3',
-                            'year' => '22',
-                        ],
-                    ],
-                ],
-            ],
+            'api_mode' => 'direct_n3d',
+            'payment_type' => 'S',
+            'mid' => 'TEST123',
+            'order_id' => 'abc',
+            'amount' => '1.00',
+            'ccy' => 'SGD',
+            'payer_id' => 'abc',
+            'payer_name' => 'John Doe',
+            'payer_email' => 'john.doe@example.com',
+            'cvv2' => '123',
+            'signature' => 'd7ad968031f84df2fe7404df230ca55fc9d77ce2fe1eeaebb2a3c07e360aae36b4b1f173dc72e844110f8ecd540a0439ed8448610b2061b136006cde0f3455a8',
         ];
 
         $this->assertEquals($expectedData, $data);
     }
+
+    public function testCreateToken()
+    {
+        $request = $this->gateway->createToken([
+            'card' => new CreditCard([
+                'firstName' => 'John',
+                'lastName' => 'Doe',
+                'expiryMonth' => '09',
+                'expiryYear' => '2029',
+                'number' => '4444333322221111',
+                'cvv' => '123',
+            ]),
+            'email' => 'john.doe@example.com',
+            'order_id' => 'cba',
+        ]);
+
+        $this->assertInstanceOf('Omnipay\Rdp\Message\TokenizeRequest', $request);
+
+        $data = $request->getData();
+
+        $expectedData = [
+            'api_mode' => 'direct_token_api',
+            'transaction_type' => 'C',
+            'mid' => 'TEST123',
+            'order_id' => 'cba',
+            'payer_name' => 'John Doe',
+            'payer_email' => 'john.doe@example.com',
+            'cvv2' => '123',
+            'card_no' => '4444333322221111',
+            'exp_date' => '092029',
+            'signature' => '4e7c3bec6b7582d8889c21fcb2666e8be9e6f6016db654194eb098d45957ac88f366c2a12dbc5d7c656736a2e786f24ad260bd816d68eb4d502c81bff07b2507',
+        ];
+
+        $this->assertEquals($expectedData, $data);
+    }
+
+
 }

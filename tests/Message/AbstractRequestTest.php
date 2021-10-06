@@ -15,14 +15,14 @@ class AbstractRequestTest extends TestCase
 
     public function testEndpointBase()
     {
-        $this->assertSame($this->request, $this->request->setEndpointBase('https://pay.e-ghl.com/ipgsg/payment.aspx'));
-        $this->assertSame('https://pay.e-ghl.com/ipgsg/payment.aspx', $this->request->getEndpointBase());
+        $this->assertSame($this->request, $this->request->setEndpointBase('https://secure-dev.reddotpayment.com/'));
+        $this->assertSame('https://secure-dev.reddotpayment.com/', $this->request->getEndpointBase());
     }
 
-    public function testPassword()
+    public function testSecretKey()
     {
-        $this->assertSame($this->request, $this->request->setPassword('abc123'));
-        $this->assertSame('abc123', $this->request->getPassword());
+        $this->assertSame($this->request, $this->request->setSecretKey('abc123'));
+        $this->assertSame('abc123', $this->request->getSecretKey());
     }
 
     public function testMerchantId()

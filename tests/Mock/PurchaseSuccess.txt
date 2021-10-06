@@ -1,172 +1,38 @@
 HTTP/1.1 200 OK
-Date: Mon, 02 Aug 2021 05:01:54 GMT
-Content-Type: text\/html; charset=utf-8
-Transfer-Encoding: chunked
-Connection: keep-alive
-Cache-Control: private, no-store
-X-AspNet-Version:  
-Set-Cookie: ASP.NET_SessionId=wnjvhqhvnvyp5djmwwzjng55; path=\/; HttpOnly; SameSite=Lax
-Strict-Transport-Security: max-age=31536000
-CF-Cache-Status: DYNAMIC
-Expect-CT: max-age=604800, report-uri=\https:\/\/report-uri.cloudflare.com\/cdn-cgi\/beacon\/expect-ct\
-Server: cloudflare
-CF-RAY: 6784c03a79a5329a-BNE
+Cache-Control: private,no-store,no-cache,must-revalidate,proxy-revalidate
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Content-Type
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Max-Age: 1728000
+Date: Fri, 12 Dec 2014 01:15:15 GMT
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Wait</title>
-<style type="text/css">
-<!--
-#waitImg {
-	background-image:url(images/ani-processing.gif);
-	width: 129px;
-	height: 20px;
-	margin-right: auto;
-	margin-left: auto;
+{
+    "mid": "1007779912",
+    "transaction_id": "dstestpay001_1684938617122233975",
+    "order_id": "dstestpay001",
+    "acquirer_transaction_id": "2428736",
+    "request_amount": "123",
+    "request_ccy": "SGD",
+    "authorized_amount": "123",
+    "authorized_ccy": "SGD",
+    "acquirer_authorized_amount": "123",
+    "acquirer_authorized_ccy": "SGD",
+    "response_code": "0",
+    "response_msg": "successful",
+    "acquirer_response_code": "0",
+    "acquirer_response_msg": "APPROVED OR COMPLETED",
+    "acquirer_authorization_code": "657300",
+    "created_timestamp": "2021-09-22 11:53:38",
+    "acquirer_created_timestamp": "2021-09-22 11:53:33",
+    "first_6": "401200",
+    "last_4": "3335",
+    "payer_name": "John Doe",
+    "exp_date": "092029",
+    "request_timestamp": "2021-09-22 11:53:36",
+    "request_mid": "1007779912",
+    "transaction_type": "S",
+    "payment_mode": "1",
+    "signature": "4ec800ee2cd1eead45a890ad6b56326db3d74852210142e28905e6f9cdec86d1a2546847652e1b98763de39c66646cc4ea6f126cf9294ed64bb5f19f929df989"
 }
-#waitPageHeader h1 {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 19px;
-	font-weight:normal;
-	color: #666666;
-	padding-bottom: 10px;
-	padding-top: 30px;
-	text-align: center;
-}
-#waitPageHeader p {
-	color: #666666;
-	font-size:12px;
-}
-.center { 
-	text-align: center; 
-	padding-top: 10px;
-}
-.spacer {
-	height: 25px;
-	margin: 0px 0px 0px;
-	clear: both;
-}
-body{
-	margin:30px 0 30px 0;
-	text-align:center;
-	background-color:#ffffff;
-	font-size:80%;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-}
-p{
-	margin:0 0 1em 0;
-}
--->
-</style>
-</head>
-
-<body>
-	<div id="waitPageHeader">
-		<h1>Please wait ...</h1>	
-		<div class="spacer"></div>
-		<div id="waitImg"></div>
-
-		<p class="center">Please do not click Back, Stop or the Refresh button</p>
-	
-		<div class="spacer"></div>
-	</div>
-</body>
-</html>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-	<title>Secure Online Payment</title>
-	<meta content="JavaScript" name="vs_defaultClientScript">
-	<meta HTTP-EQUIV="Cache-Control" CONTENT="no cache">
-	<meta HTTP-EQUIV="Pragma" CONTENT="no cache">
-	<meta HTTP-EQUIV="Expires" CONTENT="0">
-
-</head>
-<body>
-<form name='frmProcessPayment' action='s2s' method='POST'>
-<INPUT type='hidden' name='TransactionType' value='SALE'>
-<INPUT type='hidden' name='PymtMethod' value='CC'>
-<INPUT type='hidden' name='ServiceID' value='SIT'>
-<INPUT type='hidden' name='PaymentID' value='38a6iz0of8kyog0kk4oo'>
-<INPUT type='hidden' name='OrderNumber' value='9'>
-<INPUT type='hidden' name='Amount' value='200.00'>
-<INPUT type='hidden' name='CurrencyCode' value='MYR'>
-<INPUT type='hidden' name='HashValue' value='db29679ce584a9fe31c3a8eeeea653500f90362f576f72df70f05f63e0ba7b6b'>
-<INPUT type='hidden' name='HashValue2' value='fc389c897b548e618a6f67775116d36544b076881f510e83274d3414b4f72f67'>
-<INPUT type='hidden' name='TxnID' value='SIT38a6iz0of8kyog0kk4oo'>
-<INPUT type='hidden' name='IssuingBank' value='HostSim'>
-<INPUT type='hidden' name='TxnStatus' value='0'>
-<INPUT type='hidden' name='TxnMessage' value="Transaction Successful">
-<INPUT type='hidden' name='AuthCode' value='SIT38a'>
-<INPUT type='hidden' name='BankRefNo' value='SIT38a6iz0of8kyog0kk4oo'>
-<INPUT type='hidden' name='RespTime' value='2021-08-02 13:01:49'>
-<INPUT type='hidden' name='CardNoMask' value='444433XXXXXX1111'>
-<INPUT type='hidden' name='CardHolder' value='John Smith'>
-<INPUT type='hidden' name='CardType' value='VISA'>
-<INPUT type='hidden' name='CardExp' value='202308'>
-</form>
-<script language="JavaScript" type="text/javascript">
-function containsGETParameter(urlString) {
-	var indexOfQuestionMark = urlString.indexOf('?');
-	if(indexOfQuestionMark > -1){
-		var indexOfEqualSign = urlString.indexOf('=');
-		return (indexOfEqualSign > indexOfQuestionMark);
-	}
-	return false;
-}
-function convertToActionLink(formName) {
-	var actionLink;
-	if (typeof document.forms[formName] != "undefined") {
-		actionLink = document.forms[formName].action;
-		actionLink += containsGETParameter(document.forms[formName].action)?'&':'?';
-
-		var inputs = document.forms[formName].getElementsByTagName('input');
-
-		for (var i = inputs.length - 1; i >= 0; i--) {
-			actionLink += inputs[i].name + "=" + encodeURI(inputs[i].value) + "&";
-		}
-
-		actionLink += actionLink.substring(0, actionLink.length-1);
-	} 
-
-	return actionLink;
-}
-
-AutoSubmit();
-function AutoSubmit() {
-	var actionLink;
-
-	if (typeof document.frmProcessPayment.action != 'undefined') {
-		var formAction = document.frmProcessPayment.action;
-
-		if (containsGETParameter(formAction)) {
-			var parameters = formAction.substr(formAction.indexOf("?")+1).split('&')
-
-			for (var i = 0; i < parameters.length; i++) {
-				var paramObj = parameters[i].split('=');
-				var key = paramObj[0];
-				var val = paramObj[1];
-
-				if (key == 'rdp_fm' && val == '2') {
-					document.frmProcessPayment.method = 'get'
-				} else if (key == 'rdp_fm' && val == '3') {
-					actionLink = convertToActionLink('frmProcessPayment');
-				}
-			}
-
-			if (typeof actionLink != 'undefined' && actionLink.length > 0) {
-				window.location = actionLink;
-
-				return false;
-			}
-		}
-	}
-
-	window.document.frmProcessPayment.submit();
-	return true;
-}
-</script>
-</body>
-</html>

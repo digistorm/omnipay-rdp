@@ -23,6 +23,6 @@ class ResponseTest extends TestCase
 
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
-        $this->assertSame('[INVALID_REQUEST] Value \'ABCD1234\' is invalid. No valid Merchant Acquirer Relationship available', $response->getMessage());
+        $this->assertSame('Bank rejected transaction!', $response->getMessage());
     }
 }

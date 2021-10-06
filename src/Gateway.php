@@ -42,7 +42,7 @@ class Gateway extends AbstractGateway
     {
         return [
             'endpointBase' => 'https://secure-dev.reddotpayment.com/',
-            'serviceId' => '',
+            'merchantId' => '',
             'secretKey' => '',
         ];
     }
