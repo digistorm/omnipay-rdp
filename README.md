@@ -2,8 +2,9 @@
 
 **RDP (Red Dot Payment) driver for the Omnipay PHP payment processing library**
 
-Currently only supports purchases with one available method:
+Currently only supports purchases with tokenized card. Available methods:
 
+- createToken()
 - purchase()
 
 ## Usage
@@ -12,31 +13,61 @@ Currently only supports purchases with one available method:
 <?php
 use Omnipay\Omnipay;
 use Omnipay\Common\CreditCard;
+use Money\Currency;
+use Money\Money;
 
-// Create a gateway for the Mpgs Gateway
+// Create a gateway for the Rdp Gateway
 // (routes to GatewayFactory::create)
-/* @var \Omnipay\Mpgs\Gateway $gateway */
-$gateway = Omnipay::create('rdp');
+/* @var \Omnipay\Rdp\Gateway $gateway */
+$gateway = Omnipay::create('Rdp');
 
 $gateway->setTestMode(true);
-$gateway->setEndpointBase('https://test-gateway.mastercard.com');
+$gateway->setEndpointBase('https://secure-dev.reddotpayment.com/');
 $gateway->setMerchantId('merchantIdValue');
-$gateway->setPassword('passwordValue');
+$gateway->setSecretKey('secretKeyValue');
 
 
 // Charge using a card
-/* @var \Omnipay\Mpgs\Message\PurchaseResponse $response */
-$response = $gateway->purchase([
+/* @var \Omnipay\Rdp\Message\TokeneResponse $response */
+$response = $gateway->createToken([
     'card' => new CreditCard([
-        'number' => '5111111111111118',
-        'cvv' => '100',
-        'expiryMonth' => '05',
-        'expiryYear' => '2021',
         'firstName' => 'John',
         'lastName' => 'Doe',
+        'expiryMonth' => '09',
+        'expiryYear' => '2029',
+        'number' => '4444333322221111',
+        'cvv' => '123',
     ]),
-    'amount' => '50.00',
-    'currency' => 'AUD',
-    'description' => 'Merchant Reference',
+    'email' => 'john.doe@example.com',
+    'order_id' => 'cba',
+])->send();
+
+$response = $gateway->createToken([
+    'card' => new CreditCard([
+        'firstName' => 'John',
+        'lastName' => 'Doe',
+        'expiryMonth' => '09',
+        'expiryYear' => '2029',
+        'number' => '4444333322221111',
+        'cvv' => '123',
+    ]),
+    'email' => 'john.doe@example.com',
+    'order_id' => 'cba',
+])->send();
+
+$response = $gateway->purchase([
+    'card' => new CreditCard([
+        'firstName' => 'John',
+        'lastName' => 'Doe',
+        'expiryMonth' => '09',
+        'expiryYear' => '2029',
+        'number' => '4444333322221111',
+        'cvv' => '123',
+    ]),
+    'payer_id' => $response->payer_id,
+    'payer_name' => 'John Doe',
+    'payer_email' => 'john.doe@example.com',
+    'orderId' => 'abc',
+    'money' => new Money(100, new Currency('SGD')),
 ])->send();
 ```
