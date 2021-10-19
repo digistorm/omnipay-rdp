@@ -38,7 +38,15 @@ class AbstractResponse extends OmnipayResponse
         if ($this->isSuccessful()) {
             return null;
         }
-        if (isset($this->data['acquirer_response_msg'])) {
+        if (isset($this->data['response_code'])) {
+            switch ($this->data['response_code']) {
+                case '-1':
+                    return 'Bank or acquirer rejected the transaction.';
+                case '-01':
+                    return 'Transaction pending. Please contact us.';
+            }
+        }
+        if (isset($this->data['acquirer_response_msg']) && strlen($this->data['acquirer_response_msg'])) {
             return $this->data['acquirer_response_msg'];
         }
         if (isset($this->data['response_msg'])) {
