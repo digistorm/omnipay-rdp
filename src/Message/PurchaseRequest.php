@@ -24,7 +24,7 @@ class PurchaseRequest extends AbstractRequest
             'payment_type' => 'S',
             'mid' => $this->getMerchantId(),
             'order_id' => $this->getOrderId(),
-            'amount' => number_format($charge->getAmount() / 100, 2),
+            'amount' => number_format($charge->getAmount() / 100, 2, ".", ""),
             'ccy' => $charge->getCurrency()->getCode(),
             'payer_id' => $this->getPayerId(),
             'payer_name' => $this->getPayerName(),
