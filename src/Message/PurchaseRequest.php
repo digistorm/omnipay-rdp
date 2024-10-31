@@ -1,17 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\Rdp\Message;
 
+use Exception;
 use Omnipay\Common\Exception\InvalidRequestException;
 
 class PurchaseRequest extends AbstractRequest
 {
+    public const MODE_CARD = 'card';
+    public const MODE_WALLET = 'wallet';
+    public const MODE_TOKEN = 'token';
 
-    const MODE_CARD = 'card';
-    const MODE_WALLET = 'wallet';
-    const MODE_TOKEN = 'token';
-
-    public function getData()
+    /**
+     * @throws InvalidRequestException
+     */
+    public function getData(): array
     {
         // This is currently required to fetch the cvv2 value
         if (!$this->getParameter('card')) {
@@ -38,19 +43,16 @@ class PurchaseRequest extends AbstractRequest
         return $data;
     }
 
-    /**
-     * @return string
-     */
-    public function getEndpoint()
+    public function getEndpoint(): string
     {
-        // https://secure-dev.reddotpayment.com/service/payment-api
-        return trim(parent::getEndpointBase(), '/') . '/service/payment-api';
+        // Endpoint is https://secure-dev.reddotpayment.com/service/payment-api
+        return trim((string) parent::getEndpointBase(), '/') . '/service/payment-api';
     }
 
-        /**
+    /**
      * Hashing function for rdp
      */
-    public function generateSignature($mode, $params)
+    public function generateSignature(string $mode, array $params): string
     {
         $dataToSign = '';
         $dataToSign .= $params['mid'];
@@ -60,7 +62,7 @@ class PurchaseRequest extends AbstractRequest
         $dataToSign .= $params['ccy'];
         switch ($mode) {
             case static::MODE_CARD:
-                $cardNo = substr($params['card_no'], 0, 6) . substr($params['card_no'], -4);
+                $cardNo = substr((string) $params['card_no'], 0, 6) . substr((string) $params['card_no'], -4);
                 $dataToSign .= $cardNo;
                 $dataToSign .= $params['exp_date'];
                 break;
@@ -68,25 +70,21 @@ class PurchaseRequest extends AbstractRequest
                 if (isset($params['payer_id'])) {
                     $dataToSign .= $params['payer_id'];
                 } else {
-                    $dataToSign .= substr($params['token_id'], 0, 6) . substr($params['token_id'], -4);
+                    $dataToSign .= substr((string) $params['token_id'], 0, 6) . substr((string) $params['token_id'], -4);
                 }
                 break;
             default:
-                throw new \Exception('Unsupported mode');
+                throw new Exception('Unsupported mode');
         }
         if (isset($params['cvv2'])) {
-            $dataToSign .= substr($params['cvv2'], -1);
+            $dataToSign .= substr((string) $params['cvv2'], -1);
         }
         $dataToSign .= $this->getSecretKey();
+
         return hash('sha512', $dataToSign);
     }
 
-    /**
-     * @param $data
-     *
-     * @return \Omnipay\Rdp\Message\PurchaseResponse
-     */
-    protected function createResponse($data)
+    protected function createResponse(mixed $data): PurchaseResponse
     {
         return $this->response = new PurchaseResponse($this, $data);
     }

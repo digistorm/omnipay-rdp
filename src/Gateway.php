@@ -1,44 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\Rdp;
 
 use Omnipay\Common\AbstractGateway;
+use Omnipay\Common\Exception\InvalidRequestException;
+use Omnipay\Common\Message\AbstractRequest;
+use Omnipay\Common\Message\AbstractResponse;
+use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Rdp\Message\PurchaseRequest;
+use Omnipay\Rdp\Message\TokenizeRequest;
 
 /**
  * Rdp gateway
  *
- * @method \Omnipay\Common\Message\RequestInterface authorize(array $options = array())         (Optional method)
- *         Authorize an amount on the customers card
- * @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = array()) (Optional method)
- *         Handle return from off-site gateways after authorization
- * @method \Omnipay\Common\Message\RequestInterface capture(array $options = array())           (Optional method)
- *         Capture an amount you have previously authorized
- * @method \Omnipay\Common\Message\RequestInterface completePurchase(array $options = array())  (Optional method)
- *         Handle return from off-site gateways after purchase
- * @method \Omnipay\Common\Message\RequestInterface refund(array $options = array())            (Optional method)
- *         Refund an already processed transaction
- * @method \Omnipay\Common\Message\RequestInterface void(array $options = array())              (Optional method)
- *         Generally can only be called up to 24 hours after submitting a transaction
- * @method \Omnipay\Common\Message\RequestInterface createCard(array $options = array())        (Optional method)
- *         The returned response object includes a cardReference, which can be used for future transactions
- * @method \Omnipay\Common\Message\RequestInterface updateCard(array $options = array())        (Optional method)
- *         Update a stored card
- * @method \Omnipay\Common\Message\RequestInterface deleteCard(array $options = array())        (Optional method)
- *         Delete a stored card
- * @method \Omnipay\Common\Message\RequestInterface fetchTransaction(array $options = [])       (Optional method)
- *         Fetch a transaction
- * @method \Omnipay\Common\Message\RequestInterface acceptNotification(array $options = [])     (Optional method)
- *         Accept a notification
+ * @method RequestInterface authorize(array $options = []) (Optional method)
+ * Authorize an amount on the customers card
+ * @method RequestInterface completeAuthorize(array $options = []) (Optional method)
+ * Handle return from off-site gateways after authorization
+ * @method RequestInterface capture(array $options = []) (Optional method)
+ * Capture an amount you have previously authorized
+ * @method RequestInterface completePurchase(array $options = []) (Optional method)
+ * Handle return from off-site gateways after purchase
+ * @method RequestInterface refund(array $options = []) (Optional method)
+ * Refund an already processed transaction
+ * @method RequestInterface void(array $options = []) (Optional method)
+ * Generally can only be called up to 24 hours after submitting a transaction
+ * @method RequestInterface createCard(array $options = []) (Optional method)
+ * The returned response object includes a cardReference, which can be used for future transactions
+ * @method RequestInterface updateCard(array $options = []) (Optional method)
+ * Update a stored card
+ * @method RequestInterface deleteCard(array $options = []) (Optional method)
+ * Delete a stored card
+ * @method RequestInterface fetchTransaction(array $options = []) (Optional method)
+ * Fetch a transaction
+ * @method RequestInterface acceptNotification(array $options = []) (Optional method)
+ * Accept a notification
  */
 class Gateway extends AbstractGateway
 {
-    public function getName()
+    public function getName(): string
     {
         return 'rdp';
     }
 
-    public function getDefaultParameters()
+    public function getDefaultParameters(): array
     {
         return [
             'endpointBase' => 'https://secure-dev.reddotpayment.com/',
@@ -47,54 +54,51 @@ class Gateway extends AbstractGateway
         ];
     }
 
-    public function getEndpointBase()
+    public function getEndpointBase(): ?string
     {
         return $this->getParameter('endpointBase');
     }
 
-    public function setEndpointBase($value)
+    public function setEndpointBase(string $value): self
     {
         return $this->setParameter('endpointBase', $value);
     }
 
-    public function getMerchantId()
+    public function getMerchantId(): ?string
     {
         return $this->getParameter('merchantId');
     }
 
-    public function setMerchantId($value)
+    public function setMerchantId(string $value): self
     {
         return $this->setParameter('merchantId', $value);
     }
 
-    public function getSecretKey()
+    public function getSecretKey(): ?string
     {
         return $this->getParameter('secretKey');
     }
 
-    public function setSecretKey($value)
+    public function setSecretKey(string $value): self
     {
         return $this->setParameter('secretKey', $value);
     }
 
-    public function createToken(array $parameters = array())
+    public function createToken(array $parameters = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\Rdp\Message\TokenizeRequest', $parameters);
+        return $this->createRequest(TokenizeRequest::class, $parameters);
     }
 
     /**
-     * @param array $parameters
-     *
-     * @return \Omnipay\Common\Message\AbstractRequest|\Omnipay\Rdp\Message\PurchaseRequest
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
+     * @throws InvalidRequestException
      */
-    public function purchase(array $parameters = [])
+    public function purchase(array $options = []): AbstractRequest
     {
-        $parameters['endpointBase'] = $this->getEndpointBase();
-        $parameters['merchantId'] = $this->getMerchantId();
-        $parameters['secretKey'] = $this->getSecretKey();
+        $options['endpointBase'] = $this->getEndpointBase();
+        $options['merchantId'] = $this->getMerchantId();
+        $options['secretKey'] = $this->getSecretKey();
 
-        $request = $this->createRequest(PurchaseRequest::class, $parameters);
+        $request = $this->createRequest(PurchaseRequest::class, $options);
 
         // Validate required parameters
         $request->validate('endpointBase', 'merchantId', 'secretKey');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\Rdp\Message;
 
 use Money\Currency;
@@ -8,7 +10,9 @@ use Omnipay\Tests\TestCase;
 
 class PurchaseRequestTest extends TestCase
 {
-    public function setUp()
+    public $request;
+
+    public function setUp(): void
     {
         $this->request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
         $this->request->initialize(
@@ -26,7 +30,7 @@ class PurchaseRequestTest extends TestCase
         );
     }
 
-    public function testSendSuccess()
+    public function testSendSuccess(): void
     {
         $this->setMockHttpResponse('PurchaseSuccess.txt');
         $response = $this->request->send();
@@ -36,13 +40,13 @@ class PurchaseRequestTest extends TestCase
         $this->assertNull($response->getMessage());
     }
 
-    public function testSendError()
+    public function testSendError(): void
     {
         $this->setMockHttpResponse('PurchaseFailure.txt');
         $response = $this->request->send();
 
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
-        $this->assertSame('Bank rejected transaction!', $response->getMessage());
+        $this->assertSame('Bank or acquirer rejected the transaction.', $response->getMessage());
     }
 }

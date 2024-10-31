@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\Rdp\Message;
 
-use GuzzleHttp\Psr7\Stream;
 use Money\Currency;
 use Money\Money;
 use Money\Number;
@@ -19,111 +20,111 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     /**
      * Live or Test Endpoint URL.
      */
-    public function getEndpointBase()
+    public function getEndpointBase(): ?string
     {
         return $this->getParameter('endpointBase');
     }
 
-    public function setEndpointBase($value)
+    public function setEndpointBase(string $value): self
     {
         return $this->setParameter('endpointBase', $value);
     }
 
-    public function getMerchantId()
+    public function getMerchantId(): ?string
     {
         return $this->getParameter('merchantId');
     }
 
-    public function setMerchantId($value)
+    public function setMerchantId(string $value): self
     {
         return $this->setParameter('merchantId', $value);
     }
 
-    public function getSecretKey()
+    public function getSecretKey(): ?string
     {
         return $this->getParameter('secretKey');
     }
 
-    public function setSecretKey($value)
+    public function setSecretKey(string $value): self
     {
         return $this->setParameter('secretKey', $value);
     }
 
-    public function getPayerId()
+    public function getPayerId(): ?string
     {
         return $this->getParameter('payerId');
     }
 
-    public function setPayerId($value)
+    public function setPayerId(string $value): self
     {
         return $this->setParameter('payerId', $value);
     }
 
-    public function getPayerName()
+    public function getPayerName(): ?string
     {
         return $this->getParameter('payerName');
     }
 
-    public function setPayerName($value)
+    public function setPayerName(string $value): self
     {
         return $this->setParameter('payerName', $value);
     }
 
-    public function getPayerEmail()
+    public function getPayerEmail(): ?string
     {
         return $this->getParameter('payerEmail');
     }
 
-    public function setPayerEmail($value)
+    public function setPayerEmail(string $value): self
     {
         return $this->setParameter('payerEmail', $value);
     }
 
-    public function setCustomer($value)
+    public function setCustomer(string $value): self
     {
         return $this->setParameter('customer', $value);
     }
 
-    public function getCustomer()
+    public function getCustomer(): ?string
     {
         return $this->getParameter('customer');
     }
 
-    public function setEmail($value)
+    public function setEmail(string $value): self
     {
         return $this->setParameter('email', $value);
     }
 
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->getParameter('email');
     }
-    
-    public function setOrderId($value)
+
+    public function setOrderId(string $value): self
     {
         return $this->setParameter('orderId', $value);
     }
 
-    public function getOrderId()
+    public function getOrderId(): ?string
     {
         return $this->getParameter('orderId');
     }
 
-    abstract protected function createResponse($data);
+    abstract protected function createResponse(string $data): AbstractResponse;
 
     /**
      * Get HTTP Method.
      *
-     * This is nearly always POST but can be over-ridden in sub classes.
+     * This is nearly always POST but can be over-ridden in subclasses.
      *
      * @return string
      */
-    public function getHttpMethod()
+    public function getHttpMethod(): string
     {
         return 'POST';
     }
 
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return ['Content-Type' => 'application/json'];
     }
@@ -131,30 +132,29 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     /**
      * {@inheritdoc}
      */
-    public function sendData($data)
+    public function sendData(mixed $data): AbstractResponse
     {
         $response = $this->httpClient->request(
             $this->getHttpMethod(),
             $this->getEndpoint(),
             $this->getHeaders(),
-            json_encode($data)
+            json_encode($data) ?: null,
         );
+
         return $this->createResponse($response->getBody()->getContents());
     }
 
-    public function getEndpoint() {
+    public function getEndpoint(): string
+    {
         return $this->getEndpointBase();
     }
-    
+
     /**
-     * @param string $parameterName
-     *
-     * @return mixed|\Money\Money|null
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
+     * @throws InvalidRequestException
      */
-    public function getMoney($parameterName = 'amount')
+    public function getMoney(string $amount = 'amount'): ?Money
     {
-        $amount = $this->getParameter($parameterName);
+        $amount = $this->getParameter($amount);
 
         if ($amount instanceof Money) {
             return $amount;
@@ -188,5 +188,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
             return $money;
         }
+
+        return null;
     }
 }

@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\Rdp;
 
 use Money\Currency;
 use Money\Money;
 use Omnipay\Common\CreditCard;
+use Omnipay\Rdp\Message\PurchaseRequest;
+use Omnipay\Rdp\Message\TokenizeRequest;
 use Omnipay\Tests\GatewayTestCase;
 
 /**
@@ -12,7 +16,7 @@ use Omnipay\Tests\GatewayTestCase;
  */
 class GatewayTest extends GatewayTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,7 +27,7 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->setSecretKey('pass654321');
     }
 
-    public function testPurchase()
+    public function testPurchase(): void
     {
         $request = $this->gateway->purchase([
             'card' => new CreditCard([
@@ -41,7 +45,7 @@ class GatewayTest extends GatewayTestCase
             'money' => new Money(100, new Currency('SGD')),
         ]);
 
-        $this->assertInstanceOf('Omnipay\Rdp\Message\PurchaseRequest', $request);
+        $this->assertInstanceOf(PurchaseRequest::class, $request);
 
         $data = $request->getData();
 
@@ -62,7 +66,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertEquals($expectedData, $data);
     }
 
-    public function testCreateToken()
+    public function testCreateToken(): void
     {
         $request = $this->gateway->createToken([
             'card' => new CreditCard([
@@ -77,7 +81,7 @@ class GatewayTest extends GatewayTestCase
             'order_id' => 'cba',
         ]);
 
-        $this->assertInstanceOf('Omnipay\Rdp\Message\TokenizeRequest', $request);
+        $this->assertInstanceOf(TokenizeRequest::class, $request);
 
         $data = $request->getData();
 
@@ -96,6 +100,4 @@ class GatewayTest extends GatewayTestCase
 
         $this->assertEquals($expectedData, $data);
     }
-
-
 }
