@@ -1,13 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\Rdp\Message;
 
 use Omnipay\Common\Exception\InvalidRequestException;
 
 class TokenizeRequest extends AbstractRequest
 {
-
-    public function getData()
+    /**
+     * @throws InvalidRequestException
+     */
+    public function getData(): array
     {
         if (!$this->getParameter('card')) {
             throw new InvalidRequestException('You must pass a "card" parameter.');
@@ -33,31 +37,23 @@ class TokenizeRequest extends AbstractRequest
         return $data;
     }
 
-    public function generateSignature($params) {
+    public function generateSignature(array $params): string
+    {
         unset($params['signature']);
         ksort($params);
-        $dataToSign = '';
-        foreach ($params as $v) {
-           $dataToSign .= $v;
-        } 
+        $dataToSign = implode('', $params);
         $dataToSign .= $this->getSecretKey();
+
         return hash('sha512', $dataToSign);
     }
 
-    /**
-     * @return string
-     */
-    public function getEndpoint()
+    public function getEndpoint(): string
     {
-        // https://secure-dev.reddotpayment.com/service/token-api
-        return trim(parent::getEndpointBase(), '/') . '/service/token-api';
+        // Endpoint is https://secure-dev.reddotpayment.com/service/token-api
+        return trim((string) parent::getEndpointBase(), '/') . '/service/token-api';
     }
-    /**
-     * @param $data
-     *
-     * @return \Omnipay\Rdp\Message\TokenizeResponse
-     */
-    protected function createResponse($data)
+
+    protected function createResponse(mixed $data): TokenizeResponse
     {
         return $this->response = new TokenizeResponse($this, $data);
     }
