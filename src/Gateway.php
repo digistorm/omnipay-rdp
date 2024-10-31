@@ -7,7 +7,6 @@ namespace Omnipay\Rdp;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
-use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Rdp\Message\PurchaseRequest;
 use Omnipay\Rdp\Message\TokenizeRequest;
